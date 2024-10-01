@@ -23,9 +23,6 @@ const AdoptionReport = () => {
     return (
         <div>
             <div className='container mt-4'>
-                <div className="col-12 text-center">
-                    <h4 className='fw-bold'>Reporte de Adopción</h4>
-                </div>
                 <div className="col-12 mb-2 d-flex justify-content-center">
                     <Field
                         label=""
