@@ -1,4 +1,4 @@
-import { Button, Dropdown, Field, Input, Option, Textarea, useId } from '@fluentui/react-components';
+import { Button, Dropdown, Field, Input, Option, Spinner, Textarea, Toast, ToastIntent, ToastTitle, Toaster, useId, useToastController } from '@fluentui/react-components';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { FooterMovil } from './FooterMovil';
 import { validationsDoanteMaterial } from '../utils/validations/ValidationsDonateMaterial';
@@ -13,6 +13,8 @@ const DonateMaterial = () => {
     const dropdownId = useId("dropdown-default");
     const beforeId = useId("content-before");
 
+    const toasterId = useId("toaster");
+    const { dispatchToast } = useToastController(toasterId);
 
     const [selectedRefugio, setSelectedRefugio] = useState<IItemCombo>({ key: "", text: "" });
     const [selectedMaterial, setSelectedMaterial] = useState<IItemCombo>({ key: "", text: "" });
@@ -30,6 +32,16 @@ const DonateMaterial = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        notify("", null);
+        if (isFormValid) {
+            setTimeout(() => {
+                notify("Se registró el donativo material correctamente.", "success");
+                setFormDonateMaterial(initialDonateMaterial());
+                setSelectedRefugio({ key: "", text: "" });
+                setSelectedMaterial({ key: "", text: "" });
+            },2000);
+        }
     };
 
     useEffect(() => {
@@ -37,8 +49,42 @@ const DonateMaterial = () => {
         setErrors(errors);
     }, [formDonateMaterial])
 
+    const notify = (text: string, type: ToastIntent | null, timeout: number = 2000) => {
+
+        if (type === null) {
+            dispatchToast(
+                <Toast>
+                    <ToastTitle media={<Spinner size="tiny" />}>
+                        cargando...
+                    </ToastTitle>
+                </Toast>,
+                { timeout: timeout }
+            );
+        } else {
+            dispatchToast(
+                <Toast>
+                    <ToastTitle>{text}</ToastTitle>
+                </Toast>,
+                {
+                    intent: type,
+                    timeout: timeout
+                }
+            );
+        }
+
+    }
+
+
     return (
         <div className='row'>
+
+            <Toaster
+                toasterId={toasterId}
+                position="bottom-start"
+                pauseOnHover
+                pauseOnWindowBlur
+                timeout={2200}
+            />
             <div className="col-12 mb-2">
                 <Field
                     label="Refugio"
@@ -52,7 +98,7 @@ const DonateMaterial = () => {
                         value={selectedRefugio.text}
                         onOptionSelect={(e, data) => {
                             setSelectedRefugio({ key: data.optionValue ?? "", text: data.optionText ?? "" });
-                            handleChange("idRefugio",data.optionValue);
+                            handleChange("idRefugio", data.optionValue);
                         }}
                     >
                         {dataRefugios.map((option) => (
@@ -77,7 +123,7 @@ const DonateMaterial = () => {
                         value={selectedMaterial.text}
                         onOptionSelect={(e, data) => {
                             setSelectedMaterial({ key: data.optionValue ?? "", text: data.optionText ?? "" });
-                            handleChange("idMaterial",data.optionValue);
+                            handleChange("idMaterial", data.optionValue);
                         }}
                     >
                         {dataMateriales.map((option) => (
@@ -95,9 +141,9 @@ const DonateMaterial = () => {
                     validationState={!errors ? "none" : errors.direccion ? "error" : "success"}
                     validationMessage={!errors ? "none" : errors.direccion ? errors.direccion : "Correcto."}
                 >
-                    <Input 
-                    type='text' 
-                    onChange={(e) => { handleChange("direccion",e.target.value) }}
+                    <Input
+                        type='text'
+                        onChange={(e) => { handleChange("direccion", e.target.value) }}
                     />
                 </Field>
             </div>
@@ -107,9 +153,9 @@ const DonateMaterial = () => {
                     validationState={!errors ? "none" : errors.calle ? "error" : "success"}
                     validationMessage={!errors ? "none" : errors.calle ? errors.calle : "Correcto."}
                 >
-                    <Input 
-                    type='text' 
-                    onChange={(e) => { handleChange("calle",e.target.value) }}
+                    <Input
+                        type='text'
+                        onChange={(e) => { handleChange("calle", e.target.value) }}
                     />
                 </Field>
             </div>
@@ -119,9 +165,9 @@ const DonateMaterial = () => {
                     validationState={!errors ? "none" : errors.nroCalle ? "error" : "success"}
                     validationMessage={!errors ? "none" : errors.nroCalle ? errors.nroCalle : "Correcto."}
                 >
-                    <Input 
-                    type='number'
-                    onChange={(e) => { handleChange("nroCalle",e.target.value) }}
+                    <Input
+                        type='number'
+                        onChange={(e) => { handleChange("nroCalle", e.target.value) }}
                     />
                 </Field>
             </div>
@@ -131,14 +177,14 @@ const DonateMaterial = () => {
                     validationState={!errors ? "none" : errors.referencia ? "error" : "success"}
                     validationMessage={!errors ? "none" : errors.referencia ? errors.referencia : "Correcto."}
                 >
-                    <Textarea 
-                    cols={14} 
-                    onChange={(e) => { handleChange("referencia",e.target.value) }}
+                    <Textarea
+                        cols={14}
+                        onChange={(e) => { handleChange("referencia", e.target.value) }}
                     />
                 </Field>
             </div>
             <div className="col-12 mt-3">
-                <Button appearance='primary' disabled={!isFormValid}>Donar</Button>
+                <Button appearance='primary' disabled={!isFormValid} onClick={handleSubmit}>Donar</Button>
             </div>
 
             <FooterMovil />

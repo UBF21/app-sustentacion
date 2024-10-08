@@ -1,29 +1,46 @@
-import { Button, Field, Input, Label, Link, Spinner, Text, Toast, ToastIntent, ToastTitle, Toaster, useId, useToastController } from '@fluentui/react-components';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { PersonRegular, LockClosedRegular } from "@fluentui/react-icons";
-import { ILogin, initialLogin } from '../interfaces/ILogin';
-import { validationsLogin } from '../utils/validations/ValidationsLogin';
+import { IRegisterUser, initialRegisteUser } from '../interfaces/IRegisterUser';
 import { FormErrors, ValiValid } from 'vali-valid';
+import { validationsRegisterUser } from '../utils/validations/ValidationsRegisterUser';
+import { Button, Field, Input, Link, Spinner, Text, Toast, ToastIntent, ToastTitle, Toaster, useId, useToastController } from '@fluentui/react-components';
+import { PersonRegular, LockClosedRegular } from '@fluentui/react-icons';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const RegisterUser = () => {
+
 
     const navegate = useNavigate();
 
     const toasterId = useId("toaster");
     const { dispatchToast } = useToastController(toasterId);
 
-
-    const [formLogin, setFormLogin] = useState<ILogin>(initialLogin());
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [errors, setErrors] = useState<FormErrors<ILogin>>({});
+    const [formRegisterUser, setFormRegisterUser] = useState<IRegisterUser>(initialRegisteUser());
+    const [errors, setErrors] = useState<FormErrors<IRegisterUser>>({});
     const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
-    const managerValitation = new ValiValid<ILogin>(setIsFormValid, validationsLogin);
+    const managerValitation = new ValiValid<IRegisterUser>(setIsFormValid, validationsRegisterUser);
 
-    const handleChange = (field: keyof ILogin, value: any): void => {
-        managerValitation.handleChange(field, value, setFormLogin, setErrors);
+    const handleChange = (field: keyof IRegisterUser, value: any): void => {
+        managerValitation.handleChange(field, value, setFormRegisterUser, setErrors);
     };
+
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        notify("", null);
+        if (isFormValid) {
+            setTimeout(() => {
+                notify("Se Registró el usuario correctamente.", "success");
+                setFormRegisterUser(initialRegisteUser());
+            },2000);
+        }
+    };
+
+    useEffect(() => {
+        const errors = managerValitation.validate(formRegisterUser);
+        setErrors(errors);
+    }, [formRegisterUser])
 
     const notify = (text: string, type: ToastIntent | null, timeout: number = 2000) => {
 
@@ -50,35 +67,10 @@ const Login = () => {
 
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
 
-        console.log(formLogin.email === "admin@gmail.com" && formLogin.password === "##admin##");
-    
-
-        if (formLogin.email === "admin@gmail.com" && formLogin.password === "##admin##") {
-            
-            setTimeout(() => {
-                navegate("/list-pets");
-            }, 2000);
-        } else {
-            setTimeout(() => {
-                setIsLoading(false);
-                notify("Las credenciales no son correctas", "error");
-            }, 2000);
-        }
-
-    };
-
-    useEffect(() => {
-        const errors = managerValitation.validate(formLogin);
-        setErrors(errors);
-    }, [formLogin])
 
     return (
         <div className="container-fluid bg-light min-vh-100 d-flex align-items-center justify-content-center">
-
             <Toaster
                 toasterId={toasterId}
                 position="bottom-start"
@@ -90,11 +82,40 @@ const Login = () => {
                 <div className="col-12 col-md-12 col-lg-12">
                     <div className="card shadow-sm">
                         <div className="card-body p-4">
-                            <Text as="h2" size={800} weight="semibold" className="mb-3">Iniciar sesión</Text>
+                            <Text as="h2" size={800} weight="semibold" className="mb-3">Registrar Usuario</Text>
                             {/* <Text as="p" className="mb-4">Ingresa tus credenciales para acceder</Text> */}
                             <form onSubmit={handleSubmit}>
-                                <div className='mb-3'>
-                                    <pre>{JSON.stringify(formLogin,null,2)}</pre>
+                                <div className="mb-3 ">
+                                    <Field
+                                        label="Nombres"
+                                        validationState={!errors ? "none" : errors.nombres ? "error" : "success"}
+                                        validationMessage={!errors ? "none" : errors.nombres ? errors.nombres : "Correcto."}
+                                    >
+                                        <Input
+                                            id="nombres"
+                                            type="text"
+                                            value={formRegisterUser.nombres}
+                                            onChange={(e) => { handleChange("nombres", e.target.value) }}
+                                            // contentBefore={<PersonRegular />}
+                                            className="w-100"
+                                        />
+                                    </Field>
+                                </div>
+                                <div className="mb-3 ">
+                                    <Field
+                                        label="Apellidos"
+                                        validationState={!errors ? "none" : errors.apellidos ? "error" : "success"}
+                                        validationMessage={!errors ? "none" : errors.apellidos ? errors.apellidos : "Correcto."}
+                                    >
+                                        <Input
+                                            id="apellidos"
+                                            type="text"
+                                            value={formRegisterUser.apellidos}
+                                            onChange={(e) => { handleChange("apellidos", e.target.value) }}
+                                            // contentBefore={<PersonRegular />}
+                                            className="w-100"
+                                        />
+                                    </Field>
                                 </div>
                                 <div className="mb-3 ">
                                     <Field
@@ -105,7 +126,7 @@ const Login = () => {
                                         <Input
                                             id="email"
                                             type="text"
-                                            value={formLogin.email}
+                                            value={formRegisterUser.email}
                                             onChange={(e) => { handleChange("email", e.target.value) }}
                                             contentBefore={<PersonRegular />}
                                             className="w-100"
@@ -121,7 +142,7 @@ const Login = () => {
                                         <Input
                                             id="password"
                                             type="password"
-                                            value={formLogin.password}
+                                            value={formRegisterUser.password}
                                             onChange={(e) => { handleChange("password", e.target.value) }}
                                             contentBefore={<LockClosedRegular />}
                                             className="w-100"
@@ -129,19 +150,11 @@ const Login = () => {
                                     </Field>
                                 </div>
                                 <div className="d-flex justify-content-end mb-3">
-                                    <Link onClick={() => { navegate("/register-user") }}>¿No tienes cuenta? registrate</Link>
+                                    <Link onClick={() => { navegate("/login") }}>¿Ya tiene cuenta? inicie sesión</Link>
                                 </div>
-                                {
-                                    isLoading ? (
-                                        <Button type="submit" appearance="primary" className="w-100">
-                                            <Spinner size='extra-tiny' />
-                                        </Button>
-                                    ) : (
-                                        <Button type="submit" appearance="primary" className="w-100" onClick={handleSubmit}>
-                                        Inicio Sesión
-                                    </Button>
-                                    )
-                                }
+                                <Button type="submit" appearance="primary" className="w-100">
+                                    Registrar
+                                </Button>
                             </form>
                         </div>
                     </div>
@@ -152,5 +165,5 @@ const Login = () => {
 }
 
 export {
-    Login
+    RegisterUser
 };

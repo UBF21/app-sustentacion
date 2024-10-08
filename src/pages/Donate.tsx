@@ -25,7 +25,7 @@ const Donate = () => {
             <div className='container mt-4'>
                 <div className='row'>
                     <div className="col-12 text-center">
-                        <h4 className='fw-bold'>Donar</h4>
+                        <h4 className='fw-bold'>Donativo</h4>
                     </div>
                     <div className='col-12 mt-3 d-flex justify-content-center'>
                         <Checkbox
