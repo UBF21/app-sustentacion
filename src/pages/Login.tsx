@@ -93,9 +93,6 @@ const Login = () => {
                             <Text as="h2" size={800} weight="semibold" className="mb-3">Iniciar sesión</Text>
                             {/* <Text as="p" className="mb-4">Ingresa tus credenciales para acceder</Text> */}
                             <form onSubmit={handleSubmit}>
-                                <div className='mb-3'>
-                                    <pre>{JSON.stringify(formLogin,null,2)}</pre>
-                                </div>
                                 <div className="mb-3 ">
                                     <Field
                                         label="Email"
