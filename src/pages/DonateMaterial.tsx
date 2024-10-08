@@ -1,6 +1,12 @@
 import { Button, Dropdown, Field, Input, Option, Textarea, useId } from '@fluentui/react-components';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { FooterMovil } from './FooterMovil';
+import { validationsDoanteMaterial } from '../utils/validations/ValidationsDonateMaterial';
+import { FormErrors, ValiValid } from 'vali-valid';
+import { IDonateMaterial, initialDonateMaterial } from '../interfaces/IDonateMaterial';
+import { dataRefugios } from '../utils/data/DataRefugios';
+import { dataMateriales } from '../utils/data/DataMateriales';
+import { IItemCombo } from '../interfaces/IItemCombo';
 
 const DonateMaterial = () => {
 
@@ -8,103 +14,135 @@ const DonateMaterial = () => {
     const beforeId = useId("content-before");
 
 
-    const options = [
-        "Cat",
-        "Caterpillar",
-        "Corgi",
-        "Chupacabra",
-        "Dog",
-        "Ferret",
-        "Fish",
-        "Fox",
-        "Hamster",
-        "Snake",
-    ];
+    const [selectedRefugio, setSelectedRefugio] = useState<IItemCombo>({ key: "", text: "" });
+    const [selectedMaterial, setSelectedMaterial] = useState<IItemCombo>({ key: "", text: "" });
+
+    const [formDonateMaterial, setFormDonateMaterial] = useState<IDonateMaterial>(initialDonateMaterial());
+    const [errors, setErrors] = useState<FormErrors<IDonateMaterial>>({});
+    const [isFormValid, setIsFormValid] = useState<boolean>(false);
+
+    const managerValitation = new ValiValid<IDonateMaterial>(setIsFormValid, validationsDoanteMaterial);
+
+    const handleChange = (field: keyof IDonateMaterial, value: any): void => {
+        managerValitation.handleChange(field, value, setFormDonateMaterial, setErrors);
+    };
+
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+    };
+
+    useEffect(() => {
+        const errors = managerValitation.validate(formDonateMaterial);
+        setErrors(errors);
+    }, [formDonateMaterial])
 
     return (
         <div className='row'>
-        <div className="col-12 mb-2">
-            <Field
-                label="Refugio"
-                validationState="success"
-                validationMessage="This is a success message."
-            >
-
-                <Dropdown
-                    aria-labelledby={dropdownId}
-                    placeholder="Seleccione el refugio"
+            <div className="col-12 mb-2">
+                <Field
+                    label="Refugio"
+                    validationState={!errors ? "none" : errors.idRefugio ? "error" : "success"}
+                    validationMessage={!errors ? "none" : errors.idRefugio ? errors.idRefugio : "Correcto."}
                 >
-                    {options.map((option) => (
-                        <Option key={option} disabled={option === "Ferret"}>
-                            {option}
-                        </Option>
-                    ))}
-                </Dropdown>
 
-            </Field>
-        </div>
-        <div className="col-12 mb-2">
-            <Field
-                label="Material"
-                validationState="success"
-                validationMessage="This is a success message."
-            >
+                    <Dropdown
+                        aria-labelledby={dropdownId}
+                        placeholder="Seleccione el refugio"
+                        value={selectedRefugio.text}
+                        onOptionSelect={(e, data) => {
+                            setSelectedRefugio({ key: data.optionValue ?? "", text: data.optionText ?? "" });
+                            handleChange("idRefugio",data.optionValue);
+                        }}
+                    >
+                        {dataRefugios.map((option) => (
+                            <Option key={option.key} text={option.text} value={option.key}>
+                                {option.text}
+                            </Option>
+                        ))}
+                    </Dropdown>
 
-                <Dropdown
-                    aria-labelledby={dropdownId}
-                    placeholder="Seleccione el material"
+                </Field>
+            </div>
+            <div className="col-12 mb-2">
+                <Field
+                    label="Material"
+                    validationState={!errors ? "none" : errors.idMaterial ? "error" : "success"}
+                    validationMessage={!errors ? "none" : errors.idMaterial ? errors.idMaterial : "Correcto."}
                 >
-                    {options.map((option) => (
-                        <Option key={option} disabled={option === "Ferret"}>
-                            {option}
-                        </Option>
-                    ))}
-                </Dropdown>
 
-            </Field>
-        </div>
-        <div className="col-12 mb-2">
-            <Field
-                label="Dirección"
-                validationState="success"
-                validationMessage="This is a success message."
-            >
-                <Input/>
-            </Field>
-        </div>
-        <div className="col-12 mb-2">
-            <Field
-                label="Calle"
-                validationState="success"
-                validationMessage="This is a success message."
-            >
-                <Input/>
-            </Field>
-        </div>
-        <div className="col-12 mb-2">
-            <Field
-                label="N°ro Calle"
-                validationState="success"
-                validationMessage="This is a success message."
-            >
-                <Input />
-            </Field>
-        </div>
-        <div className="col-12 mb-2">
-            <Field
-                label="Referencia"
-                validationState="success"
-                validationMessage="This is a success message."
-            >
-              <Textarea cols={14} />
-            </Field>
-        </div>
-        <div className="col-12 mt-3">
-            <Button appearance='primary'>Donar</Button>
-        </div>
+                    <Dropdown
+                        aria-labelledby={dropdownId}
+                        placeholder="Seleccione el material"
+                        value={selectedMaterial.text}
+                        onOptionSelect={(e, data) => {
+                            setSelectedMaterial({ key: data.optionValue ?? "", text: data.optionText ?? "" });
+                            handleChange("idMaterial",data.optionValue);
+                        }}
+                    >
+                        {dataMateriales.map((option) => (
+                            <Option key={option.key} text={option.text} value={option.key}>
+                                {option.text}
+                            </Option>
+                        ))}
+                    </Dropdown>
 
-        <FooterMovil />
-    </div>
+                </Field>
+            </div>
+            <div className="col-12 mb-2">
+                <Field
+                    label="Dirección"
+                    validationState={!errors ? "none" : errors.direccion ? "error" : "success"}
+                    validationMessage={!errors ? "none" : errors.direccion ? errors.direccion : "Correcto."}
+                >
+                    <Input 
+                    type='text' 
+                    onChange={(e) => { handleChange("direccion",e.target.value) }}
+                    />
+                </Field>
+            </div>
+            <div className="col-12 mb-2">
+                <Field
+                    label="Calle"
+                    validationState={!errors ? "none" : errors.calle ? "error" : "success"}
+                    validationMessage={!errors ? "none" : errors.calle ? errors.calle : "Correcto."}
+                >
+                    <Input 
+                    type='text' 
+                    onChange={(e) => { handleChange("calle",e.target.value) }}
+                    />
+                </Field>
+            </div>
+            <div className="col-12 mb-2">
+                <Field
+                    label="N°ro Calle"
+                    validationState={!errors ? "none" : errors.nroCalle ? "error" : "success"}
+                    validationMessage={!errors ? "none" : errors.nroCalle ? errors.nroCalle : "Correcto."}
+                >
+                    <Input 
+                    type='number'
+                    onChange={(e) => { handleChange("nroCalle",e.target.value) }}
+                    />
+                </Field>
+            </div>
+            <div className="col-12 mb-2">
+                <Field
+                    label="Referencia"
+                    validationState={!errors ? "none" : errors.referencia ? "error" : "success"}
+                    validationMessage={!errors ? "none" : errors.referencia ? errors.referencia : "Correcto."}
+                >
+                    <Textarea 
+                    cols={14} 
+                    onChange={(e) => { handleChange("referencia",e.target.value) }}
+                    />
+                </Field>
+            </div>
+            <div className="col-12 mt-3">
+                <Button appearance='primary' disabled={!isFormValid}>Donar</Button>
+            </div>
+
+            <FooterMovil />
+        </div>
     );
 }
 

@@ -7,19 +7,21 @@ import { PublishPets } from '../pages/PublishPets';
 import { Login } from '../pages/Login';
 import { Donate } from '../pages/Donate';
 import { AdoptionReport } from '../pages/AdoptionReport';
+import { GenerateRequestGuardian } from '../pages/GenerateRequestGuardian';
 const ContentRouter = () => {
     return (
         <>
             <Routes>
-                <Route path={`${INITAL_URL}`}>
-                    <Route path=""  Component={Login}/>
-                    <Route path="login"  Component={Login}/>
-                    <Route path="publish-pets"  Component={PublishPets}/>
-                    <Route path="list-pets" Component={ListAnimals} />
-                    <Route path="apply-adaptation" Component={ApplyAdaptation}/>
-                    <Route path="donate" Component={Donate}/>
-                    <Route path="adoption-report" Component={AdoptionReport}/>
-                    <Route path="*" Component={Login}/>
+                <Route path="/">
+                    <Route index element={<Login />} /> {/* Carga Login en la ruta raíz */}
+                    <Route path="login" element={<Login />} />
+                    <Route path="publish-pets" element={<PublishPets />} />
+                    <Route path="list-pets" element={<ListAnimals />} />
+                    <Route path="apply-adaptation" element={<ApplyAdaptation />} />
+                    <Route path="donate" element={<Donate />} />
+                    <Route path="adoption-report" element={<AdoptionReport />} />
+                    <Route path="generate-request-guardian" element={<GenerateRequestGuardian />} />
+                    <Route path="*" element={<Login />} />
                 </Route>
             </Routes>
         </>

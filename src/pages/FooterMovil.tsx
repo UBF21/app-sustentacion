@@ -10,9 +10,9 @@ import { tab } from '@testing-library/user-event/dist/tab';
 const FooterMovil = () => {
 
     const items: ITabItem[] = [
-        { key: "inicio", title: "Inicio", route: "/pets/list-pets", icon: <HomeMoreRegular /> },
-        { key: "publicar", title: "Publicar", route: "/pets/publish-pets", icon: <AddSquareMultipleRegular /> },
-        { key: "donar", title: "Donar", route: "/pets/donate", icon: <MoneyRegular /> }
+        { key: "inicio", title: "Inicio", route: "/list-pets", icon: <HomeMoreRegular /> },
+        { key: "publicar", title: "Publicar", route: "/publish-pets", icon: <AddSquareMultipleRegular /> },
+        { key: "donar", title: "Donar", route: "/donate", icon: <MoneyRegular /> }
     ];
 
     const [selectedTab, setSelectedTab] = useState<string>("inicio");
