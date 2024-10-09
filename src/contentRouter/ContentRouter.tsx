@@ -9,6 +9,7 @@ import { AdoptionReport } from '../pages/AdoptionReport';
 import { GenerateRequestGuardian } from '../pages/GenerateRequestGuardian';
 import { GenerateRequestAdoption } from '../pages/GenerateRequestAdoption';
 import { RegisterUser } from '../pages/RegisterUser';
+import { ListReportAdoption } from '../pages/ListReportAdoption';
 const ContentRouter = () => {
     return (
         <>
@@ -23,6 +24,7 @@ const ContentRouter = () => {
                     <Route path="donate" element={<Donate />} />
                     <Route path="adoption-report" element={<AdoptionReport />} />
                     <Route path="generate-request-guardian" element={<GenerateRequestGuardian />} />
+                    <Route path="list-report-adoption" element={<ListReportAdoption />} />
                     <Route path="*" element={<Login />} />
                 </Route>
             </Routes>

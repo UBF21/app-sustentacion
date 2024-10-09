@@ -1,7 +1,7 @@
 import { Button, Dropdown, Field, Input, Option, Spinner, Textarea, Toast, ToastIntent, ToastTitle, Toaster, useId, useToastController } from '@fluentui/react-components';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { FooterMovil } from './FooterMovil';
-import { CardUiRegular, CalendarRegular, CalendarDateRegular, LockClosedRegular } from "@fluentui/react-icons";
+import { CardUiRegular, CalendarRegular, CalendarDateRegular, LockClosedRegular,CurrencyDollarEuroFilled } from "@fluentui/react-icons";
 import { dataRefugios } from '../utils/data/DataRefugios';
 import { IDonateMonetaria, initialDonateManetaria } from '../interfaces/IDonateMonetaria';
 import { FormErrors, ValiValid } from 'vali-valid';
@@ -105,6 +105,21 @@ const DonateMonetaria = () => {
                         ))}
                     </Dropdown>
 
+                </Field>
+            </div>
+            <div className="col-12 mb-2">
+                <Field
+                    label="Monto"
+                    validationState={!errors ? "none" : errors.monto ? "error" : "success"}
+                    validationMessage={!errors ? "none" : errors.monto ? errors.monto : "Correcto."}
+                >
+                    <Input
+                        type='number'
+                        contentBefore={<CurrencyDollarEuroFilled />}
+                        id={beforeId}
+                        value={formDonateMonetaria.monto}
+                        onChange={(e) => { handleChange("monto", e.target.value) }}
+                    />
                 </Field>
             </div>
             <div className="col-12 mb-2">

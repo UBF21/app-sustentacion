@@ -5,12 +5,27 @@ export const dataComportamientos = (): IItemCombo[] => {
         {
 
             key: crypto.randomUUID(),
-            text: "Apropiado"
+            text: "Sociable"
         },
         {
 
             key: crypto.randomUUID(),
-            text: "Inapropiado"
+            text: "Protector"
+        },
+        {
+
+            key: crypto.randomUUID(),
+            text: "Independiente"
+        },
+        {
+
+            key: crypto.randomUUID(),
+            text: "Juguetón"
+        },
+        {
+
+            key: crypto.randomUUID(),
+            text: "Amigable"
         }
     ]
 }

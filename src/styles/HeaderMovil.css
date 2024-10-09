@@ -1,0 +1,5 @@
+.Header-movil {
+    background-color: white; /* Color de fondo del footer */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}

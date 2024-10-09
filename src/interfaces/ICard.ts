@@ -3,4 +3,6 @@ export interface ICard {
     descripcion:string;
     image:string;
     showOptions?:boolean;
+    showOnlyReportAdoption? :boolean;
+    showOnlyOptions?:boolean;
 }

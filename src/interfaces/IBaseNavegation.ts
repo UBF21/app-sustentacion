@@ -1,6 +1,7 @@
-export interface IBaseNavegation{
-    key:string,
-    title:string,
-    route:string,
-    icon?: any
+export interface IBaseNavegation {
+    key: string,
+    title: string,
+    route: string,
+    icon?: any,
+    onclick?: () => void
 }

@@ -9,7 +9,9 @@ const CardComponent = (
         title = "",
         descripcion = "",
         image = "",
-        showOptions = true
+        showOptions = true,
+        showOnlyReportAdoption = false,
+        showOnlyOptions = false
     }: ICard) => {
 
     const navegate = useNavigate();
@@ -38,25 +40,80 @@ const CardComponent = (
 
                         showOptions && (
                             <div className="col-12 mt-2">
-                                <Button appearance='subtle' icon={<EyeRegular fontSize={15} />}></Button>
-                                <Button appearance='subtle' className='me-2 ms-2' icon={<ShareAndroidRegular fontSize={15} />}></Button>
+                                {
+
+                                    showOnlyOptions ? (
+                                        <div>
+
+                                            <Menu>
+                                                <MenuTrigger disableButtonEnhancement>
+                                                    <MenuButton appearance='subtle' icon={<AppsListRegular fontSize={15} />}></MenuButton>
+                                                </MenuTrigger>
+
+                                                <MenuPopover>
+                                                    {
+
+                                                        showOnlyReportAdoption ? (
+                                                            <MenuList>
+                                                                <MenuItem onClick={() => { navegate("/adoption-report") }}>Reporte de Adopción</MenuItem>
+                                                            </MenuList>
+
+                                                        ) : (
+                                                            <MenuList>
+                                                                {/* <MenuItem>Generar Seguimiento</MenuItem> */}
+                                                                {/* <MenuItem onClick={() => { navegate("/adoption-report") }}>Reporte de Adopción</MenuItem> */}
+                                                                <MenuItem onClick={() => { navegate("/generate-request-guardian") }}>Generar Petición Cuidador</MenuItem>
+                                                                <MenuItem onClick={() => { navegate("/generate-request-adoption") }}>Generar solicitud Adopción</MenuItem>
+                                                                {/* <MenuItem>Editar Animal</MenuItem> */}
+                                                            </MenuList>
+                                                        )
+                                                    }
 
 
-                                <Menu>
-                                    <MenuTrigger disableButtonEnhancement>
-                                        <MenuButton appearance='subtle' icon={<AppsListRegular fontSize={15} />}></MenuButton>
-                                    </MenuTrigger>
+                                                </MenuPopover>
+                                            </Menu>
+                                        </div>
 
-                                    <MenuPopover>
-                                        <MenuList>
-                                            {/* <MenuItem>Generar Seguimiento</MenuItem> */}
-                                            <MenuItem onClick={() => { navegate("/adoption-report") }}>Reporte de Adopción</MenuItem>
-                                            <MenuItem onClick={() => { navegate("/generate-request-guardian") }}>Generar Petición Cuidador</MenuItem>
-                                            <MenuItem onClick={() => { navegate("/generate-request-adoption") }}>Generar solicitud Adopción</MenuItem>
-                                            <MenuItem>Editar Animal</MenuItem>
-                                        </MenuList>
-                                    </MenuPopover>
-                                </Menu>
+                                    ) : (
+                                        <div>
+
+                                            <Button appearance='subtle' icon={<EyeRegular fontSize={15} />}></Button>
+                                            <Button appearance='subtle' className='me-2 ms-2' icon={<ShareAndroidRegular fontSize={15} />}></Button>
+                                            <Menu>
+                                                <MenuTrigger disableButtonEnhancement>
+                                                    <MenuButton appearance='subtle' icon={<AppsListRegular fontSize={15} />}></MenuButton>
+                                                </MenuTrigger>
+
+                                                <MenuPopover>
+                                                    {
+
+                                                        showOnlyReportAdoption ? (
+                                                            <MenuList>
+                                                                <MenuItem onClick={() => { navegate("/adoption-report") }}>Reporte de Adopción</MenuItem>
+                                                            </MenuList>
+
+                                                        ) : (
+                                                            <MenuList>
+                                                                {/* <MenuItem>Generar Seguimiento</MenuItem> */}
+                                                                {/* <MenuItem onClick={() => { navegate("/adoption-report") }}>Reporte de Adopción</MenuItem> */}
+                                                                <MenuItem onClick={() => { navegate("/generate-request-guardian") }}>Generar Petición Cuidador</MenuItem>
+                                                                <MenuItem onClick={() => { navegate("/generate-request-adoption") }}>Generar solicitud Adopción</MenuItem>
+                                                                {/* <MenuItem>Editar Animal</MenuItem> */}
+                                                            </MenuList>
+                                                        )
+                                                    }
+
+
+                                                </MenuPopover>
+                                            </Menu>
+                                        </div>
+                                    )
+
+
+                                }
+
+
+
                             </div>
                         )
                     }

@@ -135,7 +135,7 @@ const GenerateRequestAdoption = () => {
                     </div>
                     <div className="col-12 mt-3">
                         <Field
-                            label="Apellidos"
+                            label="Razón"
                             validationState={!errors ? "none" : errors.idRazonAdopcion ? "error" : "success"}
                             validationMessage={!errors ? "none" : errors.idRazonAdopcion ? errors.idRazonAdopcion : "Correcto."}
                         >

@@ -9,6 +9,12 @@ export const validationsDonateMonetaria: BuilderValidationConfig<IDonateMonetari
         ]
     },
     {
+        field: "monto",
+        validations: [
+            { type: ValidationType.Required },
+        ]
+    },
+    {
         field: "nroTarjeta",
         validations: [
             { type: ValidationType.Required },
