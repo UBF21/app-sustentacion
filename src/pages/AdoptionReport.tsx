@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { FooterMovil } from './FooterMovil';
-import { Avatar, Button, Dropdown, Field, Option, Textarea, useId } from '@fluentui/react-components';
+import { Avatar, Button, Dropdown, Field, Option, Spinner, Textarea, Toast, ToastIntent, ToastTitle, Toaster, useId, useToastController } from '@fluentui/react-components';
 import { AnimalDogRegular } from "@fluentui/react-icons";
 import { IAdoptionReport, initialAdoptionReport } from '../interfaces/IAdoptionReport';
 import { FormErrors, ValiValid } from 'vali-valid';
@@ -12,6 +12,8 @@ import { IItemCombo } from '../interfaces/IItemCombo';
 const AdoptionReport = () => {
 
     const dropdownId = useId("dropdown-default");
+    const toasterId = useId("toaster");
+    const { dispatchToast } = useToastController(toasterId);
 
     const [selectedComportamiento, setSelectedComportamiento] = useState<IItemCombo>({ key: "", text: "" });
     const [selectedEstadoSalud, setSelectedEstadoSalud] = useState<IItemCombo>({ key: "", text: "" });
@@ -21,19 +23,29 @@ const AdoptionReport = () => {
 
 
 
-    const [formAdoptionReport, setAdoptionReport] = useState<IAdoptionReport>(initialAdoptionReport());
+    const [formAdoptionReport, setFormAdoptionReport] = useState<IAdoptionReport>(initialAdoptionReport());
     const [errors, setErrors] = useState<FormErrors<IAdoptionReport>>({});
     const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
     const managerValitation = new ValiValid<IAdoptionReport>(setIsFormValid, validationsAdoptionReport);
 
     const handleChange = (field: keyof IAdoptionReport, value: any): void => {
-        managerValitation.handleChange(field, value, setAdoptionReport, setErrors);
+        managerValitation.handleChange(field, value, setFormAdoptionReport, setErrors);
     };
 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        notify("", null);
+        if (isFormValid) {
+            setTimeout(() => {
+                notify("Se Generó el reporte de adopción correctamente.", "success");
+                setFormAdoptionReport(initialAdoptionReport());
+                setSelectedComportamiento({ key: "", text: "" });
+                setSelectedEstadoSalud({ key: "", text: "" });
+            }, 2000);
+        }
     };
 
     const handleClickImage = () => {
@@ -48,11 +60,46 @@ const AdoptionReport = () => {
         setErrors(errors);
     }, [formAdoptionReport])
 
+    const notify = (text: string, type: ToastIntent | null, timeout: number = 2000) => {
+
+        if (type === null) {
+            dispatchToast(
+                <Toast>
+                    <ToastTitle media={<Spinner size="tiny" />}>
+                        cargando...
+                    </ToastTitle>
+                </Toast>,
+                { timeout: timeout }
+            );
+        } else {
+            dispatchToast(
+                <Toast>
+                    <ToastTitle>{text}</ToastTitle>
+                </Toast>,
+                {
+                    intent: type,
+                    timeout: timeout
+                }
+            );
+        }
+
+    }
 
     return (
         <div>
             <div className='container mt-4'>
-                <div className="col-12 mb-2 d-flex justify-content-center">
+
+                <Toaster
+                    toasterId={toasterId}
+                    position="bottom-start"
+                    pauseOnHover
+                    pauseOnWindowBlur
+                    timeout={2200}
+                />
+                <div className='col-12 mb-3'>
+                    <h3 className='fw-bold text-center'>Reporte de Adopción</h3>
+                </div>
+                <div className="col-12 mb-2 d-flex justify-content-center mb-3">
                     <Field
                         label=""
                         validationState={!errors ? "none" : errors.image ? "error" : "success"}
@@ -83,8 +130,10 @@ const AdoptionReport = () => {
                         validationState={!errors ? "none" : errors.comentarios ? "error" : "success"}
                         validationMessage={!errors ? "none" : errors.comentarios ? errors.comentarios : "Correcto."}
                     >
-                        <Textarea cols={13}
-                            onChange={(e) => { handleChange("comentarios", e.target.value) }}
+                        <Textarea 
+                        rows={6}
+                        value={formAdoptionReport.comentarios}
+                        onChange={(e) => { handleChange("comentarios", e.target.value) }}
                         />
                     </Field>
                 </div>
@@ -137,6 +186,7 @@ const AdoptionReport = () => {
                 <div className="col-12 mt-3">
                     <Button
                         appearance='primary'
+                        onClick={handleSubmit}
                         disabled={!isFormValid}
                     >
                         Reportar

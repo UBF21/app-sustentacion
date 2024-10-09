@@ -49,10 +49,10 @@ const CardComponent = (
 
                                     <MenuPopover>
                                         <MenuList>
-                                            <MenuItem>Generar Seguimiento</MenuItem>
+                                            {/* <MenuItem>Generar Seguimiento</MenuItem> */}
                                             <MenuItem onClick={() => { navegate("/adoption-report") }}>Reporte de Adopción</MenuItem>
                                             <MenuItem onClick={() => { navegate("/generate-request-guardian") }}>Generar Petición Cuidador</MenuItem>
-                                            <MenuItem>Solicitar Adopción</MenuItem>
+                                            <MenuItem onClick={() => { navegate("/generate-request-adoption") }}>Generar solicitud Adopción</MenuItem>
                                             <MenuItem>Editar Animal</MenuItem>
                                         </MenuList>
                                     </MenuPopover>

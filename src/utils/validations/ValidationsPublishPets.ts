@@ -21,6 +21,12 @@ export const validationsPublishPet: BuilderValidationConfig<IPublishPet> = [
         ]
     },
     {
+        field:"idRazaAnimal",
+        validations:[
+            { type:ValidationType.Required}
+        ]
+    },
+    {
         field:"idEstadoSalud",
         validations:[
             { type:ValidationType.Required}

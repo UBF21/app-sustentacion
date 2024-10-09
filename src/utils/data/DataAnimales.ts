@@ -3,11 +3,11 @@ import { IItemCombo } from "../../interfaces/IItemCombo";
 export const dataAnimales = () : IItemCombo[] => {
     return [
         {
-            key:crypto.randomUUID(),
+            key:"P",
             text:"Perro"
         },
         {
-            key:crypto.randomUUID(),
+            key:"G",
             text:"Gato"
         }
     ]

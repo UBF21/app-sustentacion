@@ -15,9 +15,9 @@ export const validationsDonateMonetaria: BuilderValidationConfig<IDonateMonetari
             {
                 type: ValidationType.Pattern,
                 value: (value: string) => {
-                    return /^\d{4}-\d{4}-\d{4}-\d{4}$/.test(value);   
+                    return /^\d{4}-\d{4}-\d{4}-\d{4}$/.test(value);
                 },
-                message: "El número de tarjeta de crédito debe tener el siguiente formato: XXXX XXXX XXXX XXXX (16 dígitos)"
+                message: "El número de tarjeta de crédito debe tener el siguiente formato: XXXX-XXXX-XXXX-XXXX (16 dígitos)"
             }
         ]
     },

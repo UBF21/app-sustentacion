@@ -1,4 +1,4 @@
-import { Button, Dropdown, Field, Input, Option, Textarea, useId } from '@fluentui/react-components';
+import { Button, Dropdown, Field, Input, Option, Spinner, Textarea, Toast, ToastIntent, ToastTitle, Toaster, useId, useToastController } from '@fluentui/react-components';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { FooterMovil } from './FooterMovil';
 import { CardUiRegular, CalendarRegular, CalendarDateRegular, LockClosedRegular } from "@fluentui/react-icons";
@@ -12,6 +12,9 @@ const DonateMonetaria = () => {
 
     const dropdownId = useId("dropdown-default");
     const beforeId = useId("content-before");
+
+    const toasterId = useId("toaster");
+    const { dispatchToast } = useToastController(toasterId);
 
     const [selectedRefugio, setSelectedRefugio] = useState<IItemCombo>({ key: "", text: "" });
 
@@ -27,7 +30,16 @@ const DonateMonetaria = () => {
 
 
     const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault()
+        
+        notify("", null);
+        if (isFormValid) {
+            setTimeout(() => {
+                notify("Se Registró el donativo monetario correctamente.", "success");
+                setFormDonateMonetaria(initialDonateManetaria());
+                setSelectedRefugio({ key: "", text: "" });
+            },2000);
+        }
     };
 
     useEffect(() => {
@@ -35,8 +47,41 @@ const DonateMonetaria = () => {
         setErrors(errors);
     }, [formDonateMonetaria])
 
+    const notify = (text: string, type: ToastIntent | null, timeout: number = 2000) => {
+
+        if (type === null) {
+            dispatchToast(
+                <Toast>
+                    <ToastTitle media={<Spinner size="tiny" />}>
+                        cargando...
+                    </ToastTitle>
+                </Toast>,
+                { timeout: timeout }
+            );
+        } else {
+            dispatchToast(
+                <Toast>
+                    <ToastTitle>{text}</ToastTitle>
+                </Toast>,
+                {
+                    intent: type,
+                    timeout: timeout
+                }
+            );
+        }
+
+    }
+
+
     return (
         <div className='row'>
+              <Toaster
+                toasterId={toasterId}
+                position="bottom-start"
+                pauseOnHover
+                pauseOnWindowBlur
+                timeout={2200}
+            />
             <div className="col-12 mb-2">
                 <Field
                     label="Refugio"
@@ -122,6 +167,7 @@ const DonateMonetaria = () => {
                 <Button
                     appearance='primary'
                     disabled={!isFormValid}
+                    onClick={handleSubmit}
                 >
                     Donar
                 </Button>
